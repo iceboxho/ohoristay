@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 
 export const metadata: Metadata = { title: "聯絡我們" };
@@ -15,7 +14,7 @@ export default function ContactPage() {
             <h2>Ohori Stay</h2>
             <dl><div><dt>EMAIL</dt><dd><a href="mailto:hello@ohoristay.jp">hello@ohoristay.jp</a></dd></div><div><dt>AREA</dt><dd>福岡市中央區・大濠公園生活圈</dd></div><div><dt>REPLY</dt><dd>通常於 1–2 個工作日內回覆</dd></div></dl>
             <p>若已決定住宿日期，直接填寫訂房申請會更快完成房況確認。</p>
-            <Link className="button" href="/booking">前往線上訂房</Link>
+            <a className="button" href="/booking">前往線上訂房</a>
           </div>
           <div className="contact-message">
             <span>こんにちは</span>

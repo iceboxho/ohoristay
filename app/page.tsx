@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { RoomCard } from "@/components/RoomCard";
 import { facilities, rooms } from "@/lib/site-data";
 
@@ -14,8 +13,8 @@ export default function Home() {
               在公園與城市之間，留一處溫暖、乾淨的生活空間。慢慢醒來、好好吃飯，像在福岡擁有自己的家。
             </p>
             <div className="hero-actions">
-              <Link className="button" href="/booking">查詢住宿日期</Link>
-              <Link className="text-link" href="/rooms">看看房型 →</Link>
+              <a className="button" href="/booking">查詢住宿日期</a>
+              <a className="text-link" href="/rooms">看看房型 →</a>
             </div>
             <div className="hero-note"><span /> 公寓式住宿・全房型獨立衛浴</div>
           </div>
@@ -40,7 +39,7 @@ export default function Home() {
             <h2>少一點匆忙，<br />多一點生活的餘白。</h2>
             <div className="intro-copy">
               <p>Ohori Stay 不是只用來睡一晚的房間。我們把旅行真正需要的事，藏進舒服的尺度裡：可以料理的廚房、可以坐下的餐桌，以及讓身體慢慢放鬆的自然色調。</p>
-              <Link className="text-link" href="/about">認識 Ohori Stay →</Link>
+              <a className="text-link" href="/about">認識 Ohori Stay →</a>
             </div>
           </div>
         </div>
@@ -50,7 +49,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 md:px-10">
           <div className="section-heading-row">
             <div><p className="eyebrow">OUR ROOMS</p><h2>選一間，適合此刻的房。</h2></div>
-            <Link className="text-link" href="/rooms">查看全部房型 →</Link>
+            <a className="text-link" href="/rooms">查看全部房型 →</a>
           </div>
           <div className="room-grid">
             {rooms.map((room, index) => <RoomCard room={room} index={index} key={room.id} />)}
@@ -72,7 +71,7 @@ export default function Home() {
                 <div key={item.number}><span>{item.number}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></div>
               ))}
             </div>
-            <Link className="button button-outline" href="/facilities">查看環境設施</Link>
+            <a className="button button-outline" href="/facilities">查看環境設施</a>
           </div>
         </div>
       </section>
@@ -87,7 +86,7 @@ export default function Home() {
               <div><strong>8</strong><span>分鐘<br />步行至地鐵站</span></div>
               <div><strong>12</strong><span>分鐘<br />地鐵至博多</span></div>
             </div>
-            <Link className="text-link text-link-light" href="/access">查看交通方式 →</Link>
+            <a className="text-link text-link-light" href="/access">查看交通方式 →</a>
           </div>
           <div className="map-art" aria-label="Ohori Stay 與大濠公園的概念位置圖">
             <div className="map-water"><span>大濠公園<br /><small>OHORI PARK</small></span></div>
@@ -102,7 +101,7 @@ export default function Home() {
           <p className="eyebrow">RESERVATION</p>
           <h2>準備好，在福岡慢下來了嗎？</h2>
           <p>送出住宿需求後，我們會儘快確認房況與完整價格。</p>
-          <Link className="button" href="/booking">開始訂房申請</Link>
+          <a className="button" href="/booking">開始訂房申請</a>
         </div>
       </section>
     </>

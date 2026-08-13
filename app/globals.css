@@ -216,6 +216,7 @@ h3 { line-height: 1.45; }
 .booking-aside li span { align-items: center; border: 1px solid var(--tea); border-radius: 50%; color: var(--wood); display: inline-flex; font-size: .7rem; height: 1.8rem; justify-content: center; width: 1.8rem; }
 .aside-note { color: var(--muted); font-size: .76rem; line-height: 1.8; }
 .booking-form { background: var(--paper); padding: clamp(1.5rem,5vw,4.5rem); }
+.form-error { background: #f8e9e4; border-left: 3px solid #a75d4b; color: #713c31; font-size: .82rem; margin-bottom: 2.5rem; padding: 1rem 1.2rem; }
 .form-section-heading { align-items: start; display: grid; gap: 1.2rem; grid-template-columns: 2.5rem 1fr; margin-bottom: 2rem; }
 .form-section-heading:not(:first-child) { border-top: 1px solid var(--line); margin-top: 4rem; padding-top: 3rem; }
 .form-section-heading > span { color: var(--wood); font-size: .72rem; }
@@ -226,6 +227,7 @@ h3 { line-height: 1.45; }
 .field-wide { grid-column: 1 / -1; }
 .field small { font-size: .65rem; font-weight: 400; }
 .field input, .field select, .field textarea { background: #faf7f0; border: 1px solid var(--line); border-radius: 0; color: var(--ink); min-height: 3.3rem; outline: none; padding: .8rem 1rem; transition: border-color 150ms ease, box-shadow 150ms ease; width: 100%; }
+.field select:disabled { cursor: wait; opacity: .62; }
 .field textarea { resize: vertical; }
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--wood); box-shadow: 0 0 0 3px rgba(169,129,94,.1); }
 .form-submit { align-items: center; border-top: 1px solid var(--line); display: flex; gap: 2rem; justify-content: space-between; margin-top: 3rem; padding-top: 2rem; }

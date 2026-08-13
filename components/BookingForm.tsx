@@ -31,7 +31,7 @@ export function BookingForm({ initialRoom = "" }: { initialRoom?: string }) {
   const [selectedRoomId, setSelectedRoomId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const successRef = useRef<HTMLDivElement>(null);
-  const today = useMemo(localToday, []);
+  const today = useMemo(() => localToday(), []);
 
   useEffect(() => {
     let cancelled = false;

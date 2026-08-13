@@ -10,6 +10,7 @@ export const navigation = [
 export const rooms = [
   {
     id: "kinari",
+    slug: "kinari-studio",
     name: "KINARI Studio",
     japanese: "きなり",
     tagline: "留白剛好的兩人小宅",
@@ -22,6 +23,7 @@ export const rooms = [
   },
   {
     id: "nagi",
+    slug: "nagi-family",
     name: "NAGI Family",
     japanese: "なぎ",
     tagline: "讓家人也能慢慢住下來",
@@ -34,6 +36,7 @@ export const rooms = [
   },
   {
     id: "tsuki",
+    slug: "tsuki-corner",
     name: "TSUKI Corner",
     japanese: "つき",
     tagline: "在轉角窗邊看城市入夜",

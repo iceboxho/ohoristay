@@ -22,7 +22,7 @@ export function RoomCard({ room, index }: { room: Room; index: number }) {
         </dl>
         <div className="room-card-footer">
           <span>{room.price}<small>／晚・參考價</small></span>
-          <a className="text-link" href={`/booking?room=${room.id}`}>選擇房型 →</a>
+          <a className="text-link" href={`/booking?room=${room.slug}`}>選擇房型 →</a>
         </div>
       </div>
     </article>

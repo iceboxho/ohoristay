@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 
 export const metadata: Metadata = { title: "訂房須知" };
@@ -24,7 +23,7 @@ export default function GuidePage() {
               <details key={title} open={index === 0}><summary><span>{String(index + 1).padStart(2, "0")}</span>{title}<i>＋</i></summary><p>{content}</p></details>
             ))}
           </div>
-          <div className="guide-cta"><p>還有其他想確認的事嗎？</p><Link className="text-link" href="/contact">聯絡我們 →</Link><Link className="button" href="/booking">開始訂房申請</Link></div>
+          <div className="guide-cta"><p>還有其他想確認的事嗎？</p><a className="text-link" href="/contact">聯絡我們 →</a><a className="button" href="/booking">開始訂房申請</a></div>
         </div>
       </section>
     </>

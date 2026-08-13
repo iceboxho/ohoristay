@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { PageHero } from "@/components/PageHero";
 
 export const metadata: Metadata = { title: "關於我們" };
@@ -27,7 +26,7 @@ export default function AboutPage() {
             <article><span>二</span><h3>真實</h3><p>提供真正用得到的設備，也清楚說明住宿的每件事。</p></article>
             <article><span>三</span><h3>在地</h3><p>從公園、市場到巷口小店，分享我們喜歡的福岡日常。</p></article>
           </div>
-          <div className="center-action"><Link className="button" href="/booking">預約一段福岡日常</Link></div>
+          <div className="center-action"><a className="button" href="/booking">預約一段福岡日常</a></div>
         </div>
       </section>
     </>

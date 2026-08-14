@@ -71,6 +71,8 @@ test("booking integration targets the RLS-protected Supabase tables", async () =
   assert.match(bookingFormSource, /form-error-submit/);
   assert.match(bookingFormSource, /scrollIntoView/);
   assert.match(bookingFormSource, /灰色範例不是已填入的內容/);
+  assert.match(bookingFormSource, /required-mark/);
+  assert.match(bookingFormSource, /window\.alert\(message\)/);
   assert.match(clientSource, /fetch\("\/api\/supabase-config"/);
   assert.doesNotMatch(clientSource, /process\.env\.NEXT_PUBLIC_SUPABASE/);
   assert.match(configRouteSource, /process\.env\.NEXT_PUBLIC_SUPABASE_URL/);

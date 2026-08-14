@@ -75,6 +75,7 @@ export function BookingForm({ initialRoom = "", initialCheckIn = "", initialChec
 
     function showFormError(message: string, fieldName?: string) {
       setErrorMessage(message);
+      if (fieldName) window.alert(message);
       window.requestAnimationFrame(() => {
         const field = fieldName ? formElement.elements.namedItem(fieldName) : null;
         if (field instanceof HTMLElement) {
@@ -121,15 +122,15 @@ export function BookingForm({ initialRoom = "", initialCheckIn = "", initialChec
 
     <div className="form-section-heading"><span>01</span><div><h2>住宿需求</h2><p>請告訴我們預計入住的日期與人數。</p></div></div>
     <div className="form-grid">
-      <label className="field">入住日期<input name="checkIn" type="date" min={today} defaultValue={initialCheckIn} required /></label>
-      <label className="field">退房日期<input name="checkOut" type="date" min={today} defaultValue={initialCheckOut} required /></label>
-      <label className="field field-wide">入住人數 <small>最多 6 人</small><input name="guests" type="number" min="1" max="6" step="1" defaultValue={safeGuests} required /></label>
+      <label className="field"><span className="field-label">入住日期 <small className="required-mark">必填</small></span><input name="checkIn" type="date" min={today} defaultValue={initialCheckIn} required /></label>
+      <label className="field"><span className="field-label">退房日期 <small className="required-mark">必填</small></span><input name="checkOut" type="date" min={today} defaultValue={initialCheckOut} required /></label>
+      <label className="field field-wide"><span className="field-label">入住人數 <small className="required-mark">必填</small><small className="field-hint">最多 6 人</small></span><input name="guests" type="number" min="1" max="6" step="1" defaultValue={safeGuests} required /></label>
     </div>
 
     <div className="form-section-heading"><span>02</span><div><h2>聯絡資料</h2><p>我們會透過 Email 或手機與您確認房況。</p></div></div>
     <div className="form-grid">
-      <label className="field">姓名<input name="name" type="text" autoComplete="name" placeholder="王小明" required /></label>
-      <label className="field">手機<input name="phone" type="tel" autoComplete="tel" placeholder="0912 345 678" required /></label>
+      <label className="field"><span className="field-label">姓名 <small className="required-mark">必填</small></span><input name="name" type="text" autoComplete="name" placeholder="王小明" required /></label>
+      <label className="field"><span className="field-label">手機 <small className="required-mark">必填</small></span><input name="phone" type="tel" autoComplete="tel" placeholder="0912 345 678" required /></label>
       <label className="field">Email <small>選填</small><input name="email" type="email" autoComplete="email" placeholder="hello@example.com" /></label>
       <label className="field">LINE ID <small>選填</small><input name="lineId" type="text" placeholder="您的 LINE ID" /></label>
       <label className="field field-wide">備註 <small>選填</small><textarea name="notes" rows={5} placeholder="如有兒童、長輩、特殊需求或預計抵達時間，歡迎告訴我們。" /></label>

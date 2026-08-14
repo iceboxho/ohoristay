@@ -257,6 +257,7 @@ h3 { line-height: 1.45; }
 .aside-note { color: var(--muted); font-size: .76rem; line-height: 1.8; }
 .booking-form { background: var(--paper); padding: clamp(1.5rem,5vw,4.5rem); }
 .form-error { background: #f8e9e4; border-left: 3px solid #a75d4b; color: #713c31; font-size: .82rem; margin-bottom: 2rem; padding: 1rem 1.2rem; }
+.form-error-submit { margin: 2rem 0 -1rem; }
 .stay-selection { background: #eee5d8; display: grid; gap: .25rem; margin-bottom: 3rem; padding: 1.4rem 1.5rem; }
 .stay-selection span,.stay-selection small { color: var(--muted); font-size: .68rem; letter-spacing: .08em; }
 .stay-selection strong { font-family: var(--serif); font-size: 1.45rem; font-weight: 500; }

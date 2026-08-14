@@ -45,7 +45,8 @@ test("server-renders the booking page and required fields", async () => {
 });
 
 test("booking integration targets the RLS-protected Supabase tables", async () => {
-  const [bookingSource, roomsSource, availabilitySource, clientSource, configRouteSource, envExample] = await Promise.all([
+  const [bookingFormSource, bookingSource, roomsSource, availabilitySource, clientSource, configRouteSource, envExample] = await Promise.all([
+    readFile(new URL("../components/BookingForm.tsx", import.meta.url), "utf8"),
     readFile(new URL("../lib/booking.ts", import.meta.url), "utf8"),
     readFile(new URL("../lib/rooms.ts", import.meta.url), "utf8"),
     readFile(new URL("../lib/availability.ts", import.meta.url), "utf8"),
@@ -64,6 +65,9 @@ test("booking integration targets the RLS-protected Supabase tables", async () =
   assert.match(availabilitySource, /rpc\("get_public_unavailable_dates"/);
   assert.match(availabilitySource, /rpc\("is_booking_date_available"/);
   assert.match(availabilitySource, /bookingStatus/);
+  assert.match(bookingFormSource, /form-error-submit/);
+  assert.match(bookingFormSource, /scrollIntoView/);
+  assert.match(bookingFormSource, /灰色範例不是已填入的內容/);
   assert.match(clientSource, /fetch\("\/api\/supabase-config"/);
   assert.doesNotMatch(clientSource, /process\.env\.NEXT_PUBLIC_SUPABASE/);
   assert.match(configRouteSource, /process\.env\.NEXT_PUBLIC_SUPABASE_URL/);

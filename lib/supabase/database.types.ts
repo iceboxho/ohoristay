@@ -97,6 +97,14 @@ export type Database = {
     Views: Record<never, never>;
     Functions: {
       is_admin: { Args: Record<never, never>; Returns: boolean };
+      get_public_unavailable_dates: {
+        Args: { p_start_date: string; p_end_date: string };
+        Returns: { check_in_date: string; check_out_date: string }[];
+      };
+      is_booking_date_available: {
+        Args: { p_room_id: string; p_check_in_date: string; p_check_out_date: string };
+        Returns: boolean;
+      };
     };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;

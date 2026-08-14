@@ -2,31 +2,14 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 
 export const metadata: Metadata = { title: "交通資訊" };
-
+const routes = [
+  ["FROM 01", "福岡機場", "搭乘福岡市地下鐵機場線前往大濠一帶，再依確認信中的步行指引抵達。"],
+  ["FROM 02", "博多站", "由博多站搭乘地下鐵機場線，不需轉乘即可前往大濠一帶。"],
+  ["FROM 03", "天神", "從天神搭乘地下鐵，適合安排購物、用餐後返回住宿。"],
+];
 export default function AccessPage() {
-  return (
-    <>
-      <PageHero eyebrow="ACCESS" title="從機場抵達，也能很從容。" description="位於福岡市中央區大濠公園生活圈，鄰近地下鐵空港線。完成訂房後，我們會提供詳細地址與圖文入住路線。" index="04" />
-      <section className="section-space">
-        <div className="mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-[1.05fr_0.95fr] md:px-10">
-          <div className="access-map">
-            <div className="access-water">OHORI<br /><small>PARK</small></div>
-            <div className="access-line"><i /><i /><i /><i /></div>
-            <span className="access-label label-airport">福岡空港</span>
-            <span className="access-label label-hakata">博多</span>
-            <span className="access-label label-tenjin">天神</span>
-            <span className="access-label label-ohori">大濠公園</span>
-          </div>
-          <div className="route-list">
-            <p className="eyebrow">BY SUBWAY</p>
-            <h2>地下鐵空港線，一條線抵達。</h2>
-            <article><span>FROM 01</span><div><h3>福岡機場</h3><p>搭乘空港線往姪濱方向，於大濠公園站下車；由車站步行約 8 分鐘。</p><strong>約 25 分鐘</strong></div></article>
-            <article><span>FROM 02</span><div><h3>博多車站</h3><p>搭乘空港線往姪濱方向，無需轉乘即可抵達大濠公園站。</p><strong>約 20 分鐘</strong></div></article>
-            <article><span>FROM 03</span><div><h3>天神</h3><p>搭乘空港線三站抵達，也可依天氣選擇散步或計程車。</p><strong>約 12 分鐘</strong></div></article>
-          </div>
-        </div>
-      </section>
-      <section className="access-tip"><div className="mx-auto max-w-4xl px-5 py-16 text-center md:px-10"><p>詳細門牌與自助入住密碼，將於訂房確認後提供，以維護住客隱私與住宿安全。</p></div></section>
-    </>
-  );
+  return <><PageHero eyebrow="ACCESS" title="靠近城市，也保留夜裡的安靜。" description="以大濠生活圈作為旅程的基地，往返福岡機場、博多與天神都方便。" index="04" />
+    <section className="section-space"><div className="section-shell access-layout"><div className="access-place"><p className="eyebrow">OHORI AREA</p><h2>福岡市・大濠一帶</h2><p>為保護住客與鄰里的隱私，完整地址與最後步行路線會在訂房確認後提供。</p><a className="button button-outline" href="/booking">查詢可住日期</a></div><div className="route-list"><p className="eyebrow">BY SUBWAY</p>{routes.map(([number,title,text]) => <article key={number}><span>{number}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div></div></section>
+    <section className="access-tip"><div className="narrow-shell text-center"><p>實際所需時間會依班次、轉乘與步行速度不同。確認訂房後，我們會提供較適合攜帶行李的路線。</p></div></section>
+  </>;
 }

@@ -23,7 +23,11 @@ test("server-renders the Ohori Stay homepage", async () => {
   assert.match(html, /OHORI/);
   assert.match(html, /住進大濠/);
   assert.match(html, /線上訂房/);
-  assert.match(html, /href=["']\/admin\/bookings["'][^>]*>訂單後台</);
+  assert.match(html, /一次一組/);
+  assert.match(html, /最多 6 人/);
+  assert.match(html, /href=["']\/admin\/bookings["'][^>]*>訂房管理</);
+  assert.match(html, /STAY CALENDAR/);
+  assert.match(html, /正在更新最新房況/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 
@@ -35,14 +39,16 @@ test("server-renders the booking page and required fields", async () => {
   for (const field of ["roomType", "checkIn", "checkOut", "guests", "name", "phone", "email", "lineId", "notes"]) {
     assert.match(html, new RegExp(`name=["']${field}["']`));
   }
-  assert.match(html, /正在載入房型/);
+  assert.match(html, /正在載入住宿資料/);
+  assert.match(html, /max=["']6["']/);
   assert.match(html, /送出訂房申請/);
 });
 
 test("booking integration targets the RLS-protected Supabase tables", async () => {
-  const [bookingSource, roomsSource, envExample] = await Promise.all([
+  const [bookingSource, roomsSource, availabilitySource, envExample] = await Promise.all([
     readFile(new URL("../lib/booking.ts", import.meta.url), "utf8"),
     readFile(new URL("../lib/rooms.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/availability.ts", import.meta.url), "utf8"),
     readFile(new URL("../.env.example", import.meta.url), "utf8"),
   ]);
 
@@ -53,6 +59,8 @@ test("booking integration targets the RLS-protected Supabase tables", async () =
     assert.match(bookingSource, new RegExp(`${field}:`));
   }
   assert.doesNotMatch(bookingSource, /status:/);
+  assert.match(availabilitySource, /rpc\("get_public_unavailable_dates"/);
+  assert.match(availabilitySource, /rpc\("is_booking_date_available"/);
   assert.match(envExample, /^NEXT_PUBLIC_SUPABASE_URL=$/m);
   assert.match(envExample, /^NEXT_PUBLIC_SUPABASE_ANON_KEY=$/m);
 });
@@ -88,6 +96,12 @@ test("admin booking access uses Supabase Auth and admin-only RLS", async () => {
   assert.match(schema, /create policy "Admins can view bookings"/);
   assert.match(schema, /create policy "Admins can update booking status"/);
   assert.match(schema, /grant update \(status\) on table public\.bookings to authenticated/);
+  assert.match(schema, /bookings_guests_limit check \(guests between 1 and 6\)/);
+  assert.match(schema, /bookings_no_confirmed_overlap/);
+  assert.match(schema, /create or replace function public\.get_public_unavailable_dates/);
+  assert.match(schema, /create or replace function public\.is_booking_date_available/);
+  assert.match(schema, /never exposes guest data/);
+  assert.match(schema, /'ohori-stay-2ldk'/);
   assert.match(readme, /第一版測試用後台/);
   assert.match(readme, /service_role/);
 });

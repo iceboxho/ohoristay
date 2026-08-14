@@ -4,32 +4,23 @@ import { navigation } from "@/lib/site-data";
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div className="mx-auto grid max-w-7xl gap-12 px-5 py-16 md:grid-cols-[1.15fr_1fr_1fr] md:px-10">
+      <div className="footer-main">
         <div>
-          <a className="brand-mark brand-mark-light" href="/">
-            <span>OHORI</span><small>STAY</small>
-          </a>
-          <p>把福岡的一段日常，留給慢慢生活的你。</p>
+          <a className="brand-mark brand-mark-light" href="/"><span>OHORI</span><small>STAY</small></a>
+          <p>福岡大濠一帶的整套 2LDK 住宿。一次只接待一組旅客，最多 6 人。</p>
         </div>
         <div>
           <p className="footer-label">EXPLORE</p>
-          <div className="footer-links">
-            {navigation.slice(0, 4).map((item) => (
-              <a href={item.href} key={item.href}>{item.label}</a>
-            ))}
-          </div>
+          <div className="footer-links">{navigation.map((item) => <a href={item.href} key={item.href}>{item.label}</a>)}</div>
         </div>
         <div>
           <p className="footer-label">CONTACT</p>
-          <p>福岡市中央區・大濠公園生活圈</p>
-          <p>hello@ohoristay.jp</p>
-          <a className="text-link text-link-light" href="/contact">聯絡我們 →</a>
+          <p>Fukuoka · Ohori Area</p>
+          <p><a href="mailto:hello@ohoristay.jp">hello@ohoristay.jp</a></p>
+          <a className="text-link text-link-light" href="/contact">聯絡 Ohori Stay →</a>
         </div>
       </div>
-      <div className="footer-bottom mx-auto flex max-w-7xl flex-wrap justify-between gap-3 px-5 py-5 md:px-10">
-        <span>© {new Date().getFullYear()} Ohori Stay</span>
-        <span>Fukuoka, Japan</span>
-      </div>
+      <div className="footer-bottom"><span>© {new Date().getFullYear()} Ohori Stay</span><span>Fukuoka, Japan</span></div>
     </footer>
   );
 }

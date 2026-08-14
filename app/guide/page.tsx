@@ -1,31 +1,17 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
 
-export const metadata: Metadata = { title: "訂房須知" };
-
+export const metadata: Metadata = { title: "入住須知" };
 const guideItems = [
-  ["入住與退房", "入住時間為 16:00 後，退房時間為 11:00 前。住宿採自助入住，確認訂房後會寄送完整流程。"],
-  ["訂房成立", "線上表單為房況申請，不代表訂房完成。收到房況、費用與付款方式確認後，訂房才會正式成立。"],
-  ["取消與變更", "第一版網站尚未開放線上付款；正式取消政策將於報價確認時一併提供，請在同意後再完成訂房。"],
-  ["兒童入住", "兒童亦計入住人數。若需要嬰兒床、床圍或其他用品，請先於備註欄詢問，我們會依房型協助確認。"],
-  ["住宿規範", "全館禁菸、禁止攜帶寵物與舉辦派對。夜間請降低音量，共同維護鄰里與其他住客的安寧。"],
-  ["清潔與備品", "入住前會完成客房清潔。連住期間不提供每日清掃；如有長住需求，可另行詢問清潔安排。"],
+  ["入住與退房", "入住與退房時間會在訂房確認時一併提供。若有晚班機或特殊抵達安排，請先在備註欄告知。"],
+  ["一次一組・最多 6 人", "Ohori Stay 為整套 2LDK，每筆住宿只接待同一組旅客；實際入住人數不得超過 6 人。"],
+  ["訂房成立方式", "送出表單是住宿申請，尚未代表訂房成立。我們確認日期與費用並完成後續確認後，訂房才正式成立。"],
+  ["兒童與加床需求", "如有兒童同行、嬰幼兒用品或特殊床位安排，請在申請時備註，我們會依空間與安全條件回覆。"],
+  ["室內禁菸與安寧", "室內全面禁菸。公寓位於生活社區，夜間請降低音量並遵守住宿確認信中的安寧規範。"],
+  ["取消與變更", "取消、日期變更與退款條件以訂房確認時提供的內容為準；送出申請前如有疑問，歡迎先與我們聯絡。"],
 ];
-
 export default function GuidePage() {
-  return (
-    <>
-      <PageHero eyebrow="BOOKING GUIDE" title="訂房以前，先讀一點重要的事。" description="清楚的規則，讓彼此都更安心。以下為第一版住宿說明；實際費用與細節會在訂房確認時再次告知。" index="05" />
-      <section className="section-space">
-        <div className="mx-auto max-w-4xl px-5 md:px-10">
-          <div className="guide-list">
-            {guideItems.map(([title, content], index) => (
-              <details key={title} open={index === 0}><summary><span>{String(index + 1).padStart(2, "0")}</span>{title}<i>＋</i></summary><p>{content}</p></details>
-            ))}
-          </div>
-          <div className="guide-cta"><p>還有其他想確認的事嗎？</p><a className="text-link" href="/contact">聯絡我們 →</a><a className="button" href="/booking">開始訂房申請</a></div>
-        </div>
-      </section>
-    </>
-  );
+  return <><PageHero eyebrow="STAY GUIDE" title="入住前，先知道這些事。" description="清楚理解申請流程、入住人數與住宿規範，讓雙方都能放心確認每一趟旅程。" index="05" />
+    <section className="section-space"><div className="narrow-shell"><div className="guide-list">{guideItems.map(([title,content], index) => <details key={title} open={index===0}><summary><span>{String(index+1).padStart(2,"0")}</span>{title}<i>＋</i></summary><p>{content}</p></details>)}</div><div className="guide-cta"><p>還有想先確認的事情嗎？</p><a className="text-link" href="/contact">聯絡我們 →</a><a className="button" href="/booking">前往訂房申請</a></div></div></section>
+  </>;
 }

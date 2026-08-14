@@ -31,6 +31,9 @@ function errorMessage(error: unknown) {
   if (error && typeof error === "object" && "code" in error && error.code === "42501") {
     return "此帳號沒有管理員權限，請確認已加入 admin_users。";
   }
+  if (error && typeof error === "object" && "code" in error && error.code === "23P01") {
+    return "這段日期已有其他已確認訂單，無法重複確認。請先檢查入住與退房日期。";
+  }
   return "目前無法讀取或更新訂單，請稍後再試。";
 }
 

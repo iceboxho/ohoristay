@@ -1,109 +1,79 @@
-import { RoomCard } from "@/components/RoomCard";
-import { facilities, rooms } from "@/lib/site-data";
+/* eslint-disable @next/next/no-img-element -- Static hospitality photography is served from the project public directory. */
+import { facilities, stay } from "@/lib/site-data";
+import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
+
+function QuickBookingBar() {
+  return (
+    <form className="quick-booking" action="/booking" method="get">
+      <label><span>入住日期</span><input name="checkIn" type="date" aria-label="入住日期" required /></label>
+      <label><span>退房日期</span><input name="checkOut" type="date" aria-label="退房日期" required /></label>
+      <label><span>入住人數</span><select name="guests" defaultValue="2" aria-label="入住人數">{[1,2,3,4,5,6].map((n) => <option value={n} key={n}>{n} 人</option>)}</select></label>
+      <button type="submit">查看住宿日期</button>
+    </form>
+  );
+}
 
 export default function Home() {
   return (
     <>
-      <section className="home-hero">
-        <div className="mx-auto grid min-h-[760px] max-w-7xl items-center gap-12 px-5 py-20 md:grid-cols-[1.05fr_0.95fr] md:px-10 md:py-24">
-          <div className="hero-copy">
-            <p className="eyebrow">FUKUOKA · OHORI</p>
-            <h1>住進大濠，<br />把旅途過成日常。</h1>
-            <p className="hero-lead">
-              在公園與城市之間，留一處溫暖、乾淨的生活空間。慢慢醒來、好好吃飯，像在福岡擁有自己的家。
-            </p>
-            <div className="hero-actions">
-              <a className="button" href="/booking">查詢住宿日期</a>
-              <a className="text-link" href="/rooms">看看房型 →</a>
-            </div>
-            <div className="hero-note"><span /> 公寓式住宿・全房型獨立衛浴</div>
-          </div>
-
-          <div className="hero-art" aria-label="以日式窗格與木質空間構成的 Ohori Stay 品牌意象">
-            <div className="hero-sun" />
-            <div className="hero-shoji"><i /><i /><i /><i /></div>
-            <div className="hero-bed"><span /></div>
-            <p>静かな時間<br /><small>A QUIET PLACE TO STAY</small></p>
-          </div>
+      <section className="immersive-hero">
+        <img className="immersive-hero-image" src="/ohori-living-dining.png" alt="Ohori Stay 採光明亮的客餐廳與廚房" />
+        <div className="immersive-hero-shade" />
+        <div className="immersive-hero-copy">
+          <p className="eyebrow">FUKUOKA · OHORI</p>
+          <h1>住進大濠，<br />擁有一段福岡日常</h1>
+          <p>{stay.layout}・一次一組・最多 {stay.capacity} 人</p>
+          <a className="text-link" href="/rooms">走進 Ohori Stay →</a>
         </div>
-        <div className="hero-scroll">SCROLL <span /></div>
+        <QuickBookingBar />
       </section>
 
       <section className="intro-section section-space">
-        <div className="mx-auto grid max-w-7xl gap-14 px-5 md:grid-cols-[0.72fr_1.28fr] md:px-10">
+        <div className="section-shell intro-layout">
+          <div><p className="eyebrow">ONE HOME, ONE GROUP</p><span className="section-number">01</span></div>
           <div>
-            <p className="eyebrow">OUR PHILOSOPHY</p>
-            <span className="section-number">01</span>
-          </div>
-          <div>
-            <h2>少一點匆忙，<br />多一點生活的餘白。</h2>
-            <div className="intro-copy">
-              <p>Ohori Stay 不是只用來睡一晚的房間。我們把旅行真正需要的事，藏進舒服的尺度裡：可以料理的廚房、可以坐下的餐桌，以及讓身體慢慢放鬆的自然色調。</p>
-              <a className="text-link" href="/about">認識 Ohori Stay →</a>
-            </div>
+            <h2>不是分租的房間，<br />是一整個只屬於你們的家。</h2>
+            <div className="intro-copy"><p>一天只接待一組旅客。兩間臥室、客餐廳、廚房與衛浴完整保留給您和同行家人朋友，在福岡也能好好吃飯、自在聊天、安心休息。</p><a className="text-link" href="/about">認識我們 →</a></div>
           </div>
         </div>
       </section>
 
-      <section className="rooms-section section-space">
-        <div className="mx-auto max-w-7xl px-5 md:px-10">
-          <div className="section-heading-row">
-            <div><p className="eyebrow">OUR ROOMS</p><h2>選一間，適合此刻的房。</h2></div>
-            <a className="text-link" href="/rooms">查看全部房型 →</a>
+      <section className="availability-section section-space">
+        <div className="section-shell availability-layout">
+          <div className="availability-copy"><p className="eyebrow">STAY CALENDAR</p><h2>先看空閒日期，<br />再安排福岡旅程。</h2><p>月曆會顯示已確認的住宿日期。可入住日期可以直接點選，並帶入線上訂房申請。</p></div>
+          <AvailabilityCalendar />
+        </div>
+      </section>
+
+      <section className="stay-preview section-space">
+        <div className="section-shell">
+          <div className="section-heading-row"><div><p className="eyebrow">THE STAY</p><h2>一套 2LDK，盛放旅程裡的相聚。</h2></div><a className="text-link" href="/rooms">完整空間介紹 →</a></div>
+          <div className="stay-gallery">
+            <figure className="stay-gallery-main"><img src="/ohori-living-dining.png" alt="Ohori Stay 客餐廳與完整廚房" /><figcaption>客餐廳與廚房</figcaption></figure>
+            <figure><img src="/ohori-bedroom-queen.png" alt="Ohori Stay 主臥室" /><figcaption>主臥室</figcaption></figure>
+            <figure><img src="/ohori-bedroom-twin.png" alt="Ohori Stay 次臥室" /><figcaption>次臥室</figcaption></figure>
           </div>
-          <div className="room-grid">
-            {rooms.map((room, index) => <RoomCard room={room} index={index} key={room.id} />)}
+          <div className="stay-facts">
+            <div><small>TYPE</small><strong>{stay.layout}</strong></div><div><small>CAPACITY</small><strong>{stay.guests}</strong></div><div><small>PRIVACY</small><strong>一次一組</strong></div><div><small>BEDROOMS</small><strong>{stay.bedrooms}</strong></div>
           </div>
         </div>
       </section>
 
-      <section className="feature-band section-space">
-        <div className="mx-auto grid max-w-7xl gap-16 px-5 md:grid-cols-[0.9fr_1.1fr] md:px-10">
-          <div className="feature-art">
-            <div className="feature-arch"><span>OHORI</span></div>
-            <p>暮らすように旅する</p>
-          </div>
-          <div>
-            <p className="eyebrow">THOUGHTFUL DETAILS</p>
-            <h2>剛剛好的設備，<br />照顧每一天的起居。</h2>
-            <div className="facility-preview">
-              {facilities.slice(0, 4).map((item) => (
-                <div key={item.number}><span>{item.number}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></div>
-              ))}
-            </div>
-            <a className="button button-outline" href="/facilities">查看環境設施</a>
-          </div>
+      <section className="facility-home section-space">
+        <div className="section-shell facility-home-layout">
+          <div><p className="eyebrow">THOUGHTFUL DETAILS</p><h2>為真正的生活，<br />準備剛剛好的設備。</h2><p className="muted-copy">不只是一晚的睡眠，也照顧一家人或朋友同行時的日常節奏。</p><a className="button button-outline" href="/facilities">查看全部設施</a></div>
+          <div className="facility-preview">{facilities.slice(0,4).map((item) => <article key={item.number}><span>{item.number}</span><div><h3>{item.title}</h3><p>{item.text}</p></div></article>)}</div>
         </div>
       </section>
 
-      <section className="location-section">
-        <div className="mx-auto grid max-w-7xl md:grid-cols-2">
-          <div className="location-copy px-5 py-20 md:px-16 md:py-28">
-            <p className="eyebrow">LOCATION</p>
-            <h2>離城市很近，<br />離日常也很近。</h2>
-            <p>早晨繞著大濠公園散步，午後搭地鐵進天神，晚上回到巷弄裡吃一頓家常料理。Ohori Stay 是探索福岡，也能安心回來的位置。</p>
-            <div className="location-stats">
-              <div><strong>8</strong><span>分鐘<br />步行至地鐵站</span></div>
-              <div><strong>12</strong><span>分鐘<br />地鐵至博多</span></div>
-            </div>
-            <a className="text-link text-link-light" href="/access">查看交通方式 →</a>
-          </div>
-          <div className="map-art" aria-label="Ohori Stay 與大濠公園的概念位置圖">
-            <div className="map-water"><span>大濠公園<br /><small>OHORI PARK</small></span></div>
-            <div className="map-road road-one" /><div className="map-road road-two" />
-            <div className="map-pin"><i />OHORI STAY</div>
-          </div>
+      <section className="location-band">
+        <div className="section-shell location-layout">
+          <div><p className="eyebrow">LOCATION</p><h2>在大濠的安靜，<br />與福岡的便利之間。</h2></div>
+          <div><p>早晨到大濠公園散步，白天前往天神與博多，晚上回到完整而安靜的住所。詳細地址與入住路線會在訂房確認後提供。</p><a className="text-link text-link-light" href="/access">查看交通資訊 →</a></div>
         </div>
       </section>
 
-      <section className="booking-cta section-space">
-        <div className="mx-auto max-w-4xl px-5 text-center md:px-10">
-          <p className="eyebrow">RESERVATION</p>
-          <h2>準備好，在福岡慢下來了嗎？</h2>
-          <p>送出住宿需求後，我們會儘快確認房況與完整價格。</p>
-          <a className="button" href="/booking">開始訂房申請</a>
-        </div>
-      </section>
+      <section className="booking-cta section-space"><div className="narrow-shell text-center"><p className="eyebrow">RESERVATION</p><h2>下一段福岡日常，從這裡開始。</h2><p>送出住宿需求後，我們會儘快確認日期、房況與完整費用。</p><a className="button" href="/booking">開始訂房申請</a></div></section>
     </>
   );
 }

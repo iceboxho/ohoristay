@@ -2,6 +2,7 @@
 -- Run this file in Supabase Dashboard > SQL Editor.
 
 create extension if not exists pgcrypto;
+create extension if not exists btree_gist;
 
 create table if not exists public.rooms (
   id uuid primary key default gen_random_uuid(),
@@ -35,6 +36,32 @@ create table if not exists public.bookings (
   updated_at timestamptz not null default now(),
   constraint bookings_valid_date_range check (check_out_date > check_in_date)
 );
+
+-- Ohori Stay is one whole 2LDK that accepts 1 to 6 guests per booking.
+-- The named constraint is recreated so existing projects can safely adopt it.
+alter table public.bookings drop constraint if exists bookings_guests_limit;
+alter table public.bookings
+  add constraint bookings_guests_limit check (guests between 1 and 6);
+
+-- A confirmed stay may never overlap another confirmed stay for the same unit.
+-- Pending requests may overlap until an administrator confirms one of them.
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conname = 'bookings_no_confirmed_overlap'
+      and conrelid = 'public.bookings'::regclass
+  ) then
+    alter table public.bookings
+      add constraint bookings_no_confirmed_overlap
+      exclude using gist (
+        room_id with =,
+        daterange(check_in_date, check_out_date, '[)') with &&
+      )
+      where (status = 'confirmed');
+  end if;
+end;
+$$;
 
 create table if not exists public.news (
   id uuid primary key default gen_random_uuid(),
@@ -131,6 +158,57 @@ $$;
 revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to authenticated;
 
+-- Public availability API. It returns dates only and never exposes guest data.
+create or replace function public.get_public_unavailable_dates(
+  p_start_date date,
+  p_end_date date
+)
+returns table (
+  check_in_date date,
+  check_out_date date
+)
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select b.check_in_date, b.check_out_date
+  from public.bookings as b
+  join public.rooms as r on r.id = b.room_id
+  where r.is_active = true
+    and b.status = 'confirmed'
+    and b.check_in_date < p_end_date
+    and b.check_out_date > p_start_date
+  order by b.check_in_date;
+$$;
+
+create or replace function public.is_booking_date_available(
+  p_room_id uuid,
+  p_check_in_date date,
+  p_check_out_date date
+)
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select p_check_out_date > p_check_in_date
+    and not exists (
+      select 1
+      from public.bookings as b
+      where b.room_id = p_room_id
+        and b.status = 'confirmed'
+        and daterange(b.check_in_date, b.check_out_date, '[)')
+          && daterange(p_check_in_date, p_check_out_date, '[)')
+    );
+$$;
+
+revoke all on function public.get_public_unavailable_dates(date, date) from public;
+revoke all on function public.is_booking_date_available(uuid, date, date) from public;
+grant execute on function public.get_public_unavailable_dates(date, date) to anon, authenticated;
+grant execute on function public.is_booking_date_available(uuid, date, date) to anon, authenticated;
+
 -- Recreate policies so the script can be safely run again.
 drop policy if exists "Public can view active rooms" on public.rooms;
 create policy "Public can view active rooms"
@@ -199,7 +277,12 @@ grant insert (
 grant select on table public.bookings to authenticated;
 grant update (status) on table public.bookings to authenticated;
 
--- Ohori Stay sample room data. Existing rows with the same slug are updated.
+-- Ohori Stay is sold as one whole 2LDK, never as separate room inventory.
+-- Existing demo room rows are kept for booking history but deactivated.
+update public.rooms
+set is_active = false
+where slug in ('kinari-studio', 'nagi-family', 'tsuki-corner');
+
 insert into public.rooms (
   name,
   slug,
@@ -213,36 +296,14 @@ insert into public.rooms (
 )
 values
   (
-    'KINARI Studio',
-    'kinari-studio',
-    '留白剛好的兩人小宅，適合情侶或個人旅居。',
-    2,
-    12800,
-    15800,
-    2000,
+    'Ohori Stay 2LDK',
+    'ohori-stay-2ldk',
+    '福岡大濠一帶的整套 2LDK，一次只接待一組旅客，最多入住六人。',
+    6,
     null,
-    true
-  ),
-  (
-    'NAGI Family',
-    'nagi-family',
-    '讓家人也能慢慢住下來的寬敞房型，最多入住四人。',
-    4,
-    18600,
-    22800,
-    2500,
     null,
-    true
-  ),
-  (
-    'TSUKI Corner',
-    'tsuki-corner',
-    '擁有轉角採光與閱讀沙發，適合一至三人入住。',
-    3,
-    15200,
-    18800,
-    2000,
     null,
+    '/ohori-living-dining.png',
     true
   )
 on conflict (slug) do update

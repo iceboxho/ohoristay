@@ -244,7 +244,7 @@ h3 { line-height: 1.45; }
 
 /* Booking form */
 .booking-section { background: #e9dfd1; }
-.booking-calendar-section { background: var(--paper); }
+.booking-calendar-section { background: var(--paper); scroll-margin-top: 5rem; }
 .booking-calendar-section .section-heading-row { align-items: end; }
 .booking-calendar-section .section-heading-row > p { margin: 0; max-width: 34rem; }
 .availability-calendar-compact { margin-inline: auto; max-width: 860px; }

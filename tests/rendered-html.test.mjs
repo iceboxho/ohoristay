@@ -27,6 +27,8 @@ test("server-renders the Ohori Stay homepage", async () => {
   assert.match(html, /最多 6 人/);
   assert.match(html, /href=["']\/admin\/bookings["'][^>]*>訂房管理</);
   assert.match(html, /STAY CALENDAR/);
+  assert.match(html, /action=["']\/booking#availability["']/);
+  assert.doesNotMatch(html, /aria-label=["']入住日期["'][^>]*required/);
   assert.match(html, /正在更新最新房況/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
@@ -42,6 +44,7 @@ test("server-renders the booking page and required fields", async () => {
   assert.match(html, /正在載入住宿資料/);
   assert.match(html, /max=["']6["']/);
   assert.match(html, /送出訂房申請/);
+  assert.match(html, /id=["']availability["']/);
 });
 
 test("booking integration targets the RLS-protected Supabase tables", async () => {

@@ -4,9 +4,9 @@ import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
 
 function QuickBookingBar() {
   return (
-    <form className="quick-booking" action="/booking" method="get">
-      <label><span>入住日期</span><input name="checkIn" type="date" aria-label="入住日期" required /></label>
-      <label><span>退房日期</span><input name="checkOut" type="date" aria-label="退房日期" required /></label>
+    <form className="quick-booking" action="/booking#availability" method="get">
+      <label><span>入住日期</span><input name="checkIn" type="date" aria-label="入住日期" /></label>
+      <label><span>退房日期</span><input name="checkOut" type="date" aria-label="退房日期" /></label>
       <label><span>入住人數</span><select name="guests" defaultValue="2" aria-label="入住人數">{[1,2,3,4,5,6].map((n) => <option value={n} key={n}>{n} 人</option>)}</select></label>
       <button type="submit">查看住宿日期</button>
     </form>

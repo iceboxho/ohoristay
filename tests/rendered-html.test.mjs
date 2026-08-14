@@ -45,10 +45,12 @@ test("server-renders the booking page and required fields", async () => {
 });
 
 test("booking integration targets the RLS-protected Supabase tables", async () => {
-  const [bookingSource, roomsSource, availabilitySource, envExample] = await Promise.all([
+  const [bookingSource, roomsSource, availabilitySource, clientSource, configRouteSource, envExample] = await Promise.all([
     readFile(new URL("../lib/booking.ts", import.meta.url), "utf8"),
     readFile(new URL("../lib/rooms.ts", import.meta.url), "utf8"),
     readFile(new URL("../lib/availability.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/supabase/client.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/api/supabase-config/route.ts", import.meta.url), "utf8"),
     readFile(new URL("../.env.example", import.meta.url), "utf8"),
   ]);
 
@@ -61,6 +63,11 @@ test("booking integration targets the RLS-protected Supabase tables", async () =
   assert.doesNotMatch(bookingSource, /status:/);
   assert.match(availabilitySource, /rpc\("get_public_unavailable_dates"/);
   assert.match(availabilitySource, /rpc\("is_booking_date_available"/);
+  assert.match(clientSource, /fetch\("\/api\/supabase-config"/);
+  assert.doesNotMatch(clientSource, /process\.env\.NEXT_PUBLIC_SUPABASE/);
+  assert.match(configRouteSource, /process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
+  assert.match(configRouteSource, /process\.env\.NEXT_PUBLIC_SUPABASE_ANON_KEY/);
+  assert.match(configRouteSource, /Cache-Control.*no-store/s);
   assert.match(envExample, /^NEXT_PUBLIC_SUPABASE_URL=$/m);
   assert.match(envExample, /^NEXT_PUBLIC_SUPABASE_ANON_KEY=$/m);
 });

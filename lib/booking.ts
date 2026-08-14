@@ -17,7 +17,7 @@ export type BookingRequest = {
  * only; status is intentionally omitted so PostgreSQL applies `pending`.
  */
 export async function submitBookingRequest(request: BookingRequest) {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   const { error } = await supabase.from("bookings").insert({
     room_id: request.roomId,
     check_in_date: request.checkIn,

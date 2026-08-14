@@ -11,7 +11,7 @@ type UnavailableDateRow = {
 };
 
 export async function fetchUnavailableDateRanges(startDate: string, endDate: string) {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   const { data, error } = await supabase.rpc("get_public_unavailable_dates", {
     p_start_date: startDate,
     p_end_date: endDate,
@@ -26,7 +26,7 @@ export async function fetchUnavailableDateRanges(startDate: string, endDate: str
 }
 
 export async function checkBookingAvailability(roomId: string, checkInDate: string, checkOutDate: string) {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   const { data, error } = await supabase.rpc("is_booking_date_available", {
     p_room_id: roomId,
     p_check_in_date: checkInDate,

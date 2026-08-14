@@ -2,6 +2,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/lib/supabase/database.types";
 
 let browserClient: SupabaseClient<Database> | null = null;
+let browserClientPromise: Promise<SupabaseClient<Database>> | null = null;
 
 export class SupabaseConfigurationError extends Error {
   constructor() {
@@ -10,23 +11,42 @@ export class SupabaseConfigurationError extends Error {
   }
 }
 
-export function getSupabaseBrowserClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+type PublicSupabaseConfig = {
+  url?: string;
+  anonKey?: string;
+};
 
-  if (!supabaseUrl || !supabaseAnonKey) {
-    throw new SupabaseConfigurationError();
-  }
+async function createBrowserClient() {
+  const response = await fetch("/api/supabase-config", {
+    cache: "no-store",
+    headers: { Accept: "application/json" },
+  });
 
-  if (!browserClient) {
-    browserClient = createClient<Database>(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        autoRefreshToken: true,
-        detectSessionInUrl: false,
-        persistSession: true,
-      },
+  if (!response.ok) throw new SupabaseConfigurationError();
+
+  const config = (await response.json()) as PublicSupabaseConfig;
+  if (!config.url || !config.anonKey) throw new SupabaseConfigurationError();
+
+  browserClient = createClient<Database>(config.url, config.anonKey, {
+    auth: {
+      autoRefreshToken: true,
+      detectSessionInUrl: false,
+      persistSession: true,
+    },
+  });
+
+  return browserClient;
+}
+
+export async function getSupabaseBrowserClient() {
+  if (browserClient) return browserClient;
+
+  if (!browserClientPromise) {
+    browserClientPromise = createBrowserClient().catch((error) => {
+      browserClientPromise = null;
+      throw error;
     });
   }
 
-  return browserClient;
+  return browserClientPromise;
 }

@@ -45,7 +45,7 @@ function roomName(rooms: BookingRow["rooms"]) {
 }
 
 export async function fetchAdminBookings(): Promise<AdminBooking[]> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from("bookings")
     .select(
@@ -72,7 +72,7 @@ export async function fetchAdminBookings(): Promise<AdminBooking[]> {
 }
 
 export async function updateAdminBookingStatus(id: string, status: BookingStatus) {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from("bookings")
     .update({ status })

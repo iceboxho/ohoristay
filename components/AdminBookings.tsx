@@ -59,30 +59,41 @@ export function AdminBookings() {
   }, []);
 
   useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
     let active = true;
+    let unsubscribe: (() => void) | undefined;
 
-    void supabase.auth.getSession().then(({ data }) => {
-      if (!active) return;
-      const session = data.session;
-      setAccountEmail(session?.user.email ?? "");
-      setAuthState(session ? "signed-in" : "signed-out");
-      if (session) void loadBookings();
-    });
+    void (async () => {
+      try {
+        const supabase = await getSupabaseBrowserClient();
+        if (!active) return;
 
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!active) return;
-      setAccountEmail(session?.user.email ?? "");
-      setAuthState(session ? "signed-in" : "signed-out");
-      if (!session) {
-        setBookings([]);
-        setListState("idle");
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!active) return;
+        const session = sessionData.session;
+        setAccountEmail(session?.user.email ?? "");
+        setAuthState(session ? "signed-in" : "signed-out");
+        if (session) void loadBookings();
+
+        const { data } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+          if (!active) return;
+          setAccountEmail(nextSession?.user.email ?? "");
+          setAuthState(nextSession ? "signed-in" : "signed-out");
+          if (!nextSession) {
+            setBookings([]);
+            setListState("idle");
+          }
+        });
+        unsubscribe = () => data.subscription.unsubscribe();
+      } catch (configError) {
+        if (!active) return;
+        setAuthState("signed-out");
+        setError(errorMessage(configError));
       }
-    });
+    })();
 
     return () => {
       active = false;
-      data.subscription.unsubscribe();
+      unsubscribe?.();
     };
   }, [loadBookings]);
 
@@ -106,7 +117,7 @@ export function AdminBookings() {
       return;
     }
 
-    const supabase = getSupabaseBrowserClient();
+    const supabase = await getSupabaseBrowserClient();
     const { error: signInError } = await supabase.auth.signInWithPassword({
       email: email.trim(),
       password,
@@ -122,7 +133,8 @@ export function AdminBookings() {
 
   async function handleLogout() {
     setError("");
-    await getSupabaseBrowserClient().auth.signOut();
+    const supabase = await getSupabaseBrowserClient();
+    await supabase.auth.signOut();
   }
 
   async function handleStatusChange(id: string, status: BookingStatus) {

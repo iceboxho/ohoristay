@@ -8,7 +8,7 @@ export type RoomOption = {
 };
 
 export async function fetchActiveRooms(): Promise<RoomOption[]> {
-  const supabase = getSupabaseBrowserClient();
+  const supabase = await getSupabaseBrowserClient();
   const { data, error } = await supabase
     .from("rooms")
     .select("id, name, slug, capacity")

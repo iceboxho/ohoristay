@@ -14,6 +14,7 @@ export function SiteHeader() {
           {navigation.map((item) => (
             <a href={item.href} key={item.href}>{item.label}</a>
           ))}
+          <a href="/admin/bookings">訂單後台</a>
           <a className="button button-small" href="/booking">線上訂房</a>
         </nav>
 
@@ -23,6 +24,7 @@ export function SiteHeader() {
             {navigation.map((item) => (
               <a href={item.href} key={item.href}>{item.label}</a>
             ))}
+            <a href="/admin/bookings">訂單後台</a>
             <a className="button" href="/booking">線上訂房</a>
           </nav>
         </details>

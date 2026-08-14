@@ -23,6 +23,7 @@ test("server-renders the Ohori Stay homepage", async () => {
   assert.match(html, /OHORI/);
   assert.match(html, /住進大濠/);
   assert.match(html, /線上訂房/);
+  assert.match(html, /href=["']\/admin\/bookings["'][^>]*>訂單後台</);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/i);
 });
 

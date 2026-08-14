@@ -75,6 +75,15 @@ test("server-renders the protected admin bookings page shell", async () => {
   assert.match(html, /noindex/);
 });
 
+test("server-renders the check-in and check-out guest guides", async () => {
+  const response = await render("/guide");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /801-check-in-guide\.webp/);
+  assert.match(html, /801-check-out-guide\.webp/);
+  assert.match(html, /入住與退房圖解/);
+});
+
 test("admin booking access uses Supabase Auth and admin-only RLS", async () => {
   const [componentSource, dataSource, schema, readme] = await Promise.all([
     readFile(new URL("../components/AdminBookings.tsx", import.meta.url), "utf8"),

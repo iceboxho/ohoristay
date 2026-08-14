@@ -214,6 +214,17 @@ h3 { line-height: 1.45; }
 .guide-list details > p { color: var(--muted); line-height: 2; margin: 0 0 2rem 4.5rem; max-width: 44rem; }
 .guide-cta { align-items: center; background: var(--paper); display: flex; gap: 2rem; justify-content: space-between; margin-top: 4rem; padding: 2rem; }
 .guide-cta p { margin: 0; }
+.guest-guide-section { background: #e9dfd1; }
+.guest-guide-section .section-heading-row > p { margin: 0; max-width: 28rem; }
+.guest-guide-grid { display: grid; gap: 1.5rem; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.guest-guide-grid figure { background: var(--paper); margin: 0; min-width: 0; }
+.guest-guide-grid figure > a:first-child { display: block; overflow: hidden; }
+.guest-guide-grid img { aspect-ratio: 7/10; object-fit: cover; object-position: top; transition: transform 220ms ease; width: 100%; }
+.guest-guide-grid figure > a:first-child:hover img { transform: scale(1.015); }
+.guest-guide-grid figcaption { align-items: center; display: grid; gap: 1rem; grid-template-columns: 2rem 1fr auto; padding: 1.5rem; }
+.guest-guide-grid figcaption > span { color: var(--wood); font-size: .7rem; }
+.guest-guide-grid h3 { font-family: var(--serif); font-size: 1.35rem; margin: 0 0 .25rem; }
+.guest-guide-grid figcaption p { color: var(--muted); font-size: .74rem; margin: 0; }
 .contact-layout { display: grid; gap: 1.5rem; grid-template-columns: .85fr 1.15fr; }
 .contact-layout > img { height: 100%; min-height: 580px; object-fit: cover; }
 .contact-card { background: var(--paper); padding: clamp(2rem,5vw,4.5rem); }
@@ -365,6 +376,9 @@ h3 { line-height: 1.45; }
   .guide-list summary { font-size: 1.05rem; gap: .8rem; grid-template-columns: 2rem 1fr 1.5rem; }
   .guide-list details > p { margin-left: 2.8rem; }
   .guide-cta { align-items: stretch; flex-direction: column; }
+  .guest-guide-grid { grid-template-columns: 1fr; }
+  .guest-guide-grid figcaption { grid-template-columns: 2rem 1fr; }
+  .guest-guide-grid figcaption .text-link { grid-column: 2; justify-self: start; }
   .contact-layout > img { min-height: 420px; }
   .form-grid { grid-template-columns: 1fr; }
   .field-wide { grid-column: auto; }

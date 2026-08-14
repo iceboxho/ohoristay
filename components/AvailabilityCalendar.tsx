@@ -25,8 +25,11 @@ function addDays(date: Date, days: number) {
   return result;
 }
 
-function isUnavailable(date: string, ranges: UnavailableDateRange[]) {
-  return ranges.some((range) => date >= range.checkInDate && date < range.checkOutDate);
+function dateBookingStatus(date: string, ranges: UnavailableDateRange[]) {
+  const matchingRanges = ranges.filter((range) => date >= range.checkInDate && date < range.checkOutDate);
+  if (matchingRanges.some((range) => range.bookingStatus === "confirmed")) return "confirmed";
+  if (matchingRanges.some((range) => range.bookingStatus === "pending")) return "pending";
+  return null;
 }
 
 export function AvailabilityCalendar({ compact = false }: { compact?: boolean }) {
@@ -44,18 +47,25 @@ export function AvailabilityCalendar({ compact = false }: { compact?: boolean })
 
   useEffect(() => {
     let active = true;
-    fetchUnavailableDateRanges(rangeStart, rangeEnd)
-      .then((data) => {
+    async function refreshAvailability() {
+      try {
+        const data = await fetchUnavailableDateRanges(rangeStart, rangeEnd);
         if (!active) return;
         setRanges(data);
         setStatus("ready");
-      })
-      .catch(() => {
+      } catch {
         if (!active) return;
         setRanges([]);
         setStatus("error");
-      });
-    return () => { active = false; };
+      }
+    }
+
+    void refreshAvailability();
+    const refreshTimer = window.setInterval(() => void refreshAvailability(), 30_000);
+    return () => {
+      active = false;
+      window.clearInterval(refreshTimer);
+    };
   }, [rangeEnd, rangeStart]);
 
   function goToBooking(date: string) {
@@ -86,12 +96,14 @@ export function AvailabilityCalendar({ compact = false }: { compact?: boolean })
           const iso = dateOnly(day);
           const outside = day.getMonth() !== month.getMonth();
           const past = iso < today;
-          const booked = !past && isUnavailable(iso, ranges);
-          const available = !outside && !past && !booked && status === "ready";
-          const label = booked ? "已訂房" : past ? "過去日期" : available ? "可入住" : "日期";
+          const bookingStatus = !past ? dateBookingStatus(iso, ranges) : null;
+          const booked = bookingStatus === "confirmed";
+          const pending = bookingStatus === "pending";
+          const available = !outside && !past && !booked && !pending && status === "ready";
+          const label = booked ? "已訂房" : pending ? "待確認" : past ? "過去日期" : available ? "可入住" : "日期";
           return (
             <button
-              className={["calendar-day", outside ? "calendar-day-outside" : "", past ? "calendar-day-past" : "", booked ? "calendar-day-booked" : "", available ? "calendar-day-available" : ""].filter(Boolean).join(" ")}
+              className={["calendar-day", outside ? "calendar-day-outside" : "", past ? "calendar-day-past" : "", booked ? "calendar-day-booked" : "", pending ? "calendar-day-pending" : "", available ? "calendar-day-available" : ""].filter(Boolean).join(" ")}
               disabled={!available}
               key={iso}
               onClick={() => goToBooking(iso)}
@@ -99,17 +111,17 @@ export function AvailabilityCalendar({ compact = false }: { compact?: boolean })
               aria-label={`${iso}，${label}`}
             >
               <span>{day.getDate()}</span>
-              {!outside && <small>{booked ? "已訂" : available ? "可住" : ""}</small>}
+              {!outside && <small>{booked ? "已訂" : pending ? "待確認" : available ? "可住" : ""}</small>}
             </button>
           );
         })}
       </div>
 
       <div className="calendar-footer">
-        <div className="calendar-legend"><span><i className="legend-available" />可入住</span><span><i className="legend-booked" />已訂房</span><span><i className="legend-past" />過去日期</span></div>
+        <div className="calendar-legend"><span><i className="legend-available" />可入住</span><span><i className="legend-pending" />待確認</span><span><i className="legend-booked" />已訂房</span><span><i className="legend-past" />過去日期</span></div>
         {status === "loading" && <p role="status">正在更新最新房況…</p>}
         {status === "error" && <p role="alert">目前無法載入即時房況，請稍後再試或直接聯絡我們。</p>}
-        {status === "ready" && <p>點選可入住日期，可直接帶入訂房申請。</p>}
+        {status === "ready" && <p>待確認日期正在審核中；點選可入住日期，可直接帶入訂房申請。</p>}
       </div>
     </div>
   );

@@ -158,28 +158,31 @@ $$;
 revoke all on function public.is_admin() from public;
 grant execute on function public.is_admin() to authenticated;
 
--- Public availability API. It returns dates only and never exposes guest data.
+-- Public availability API. It returns dates and public-facing status only;
+-- it never exposes guest names, contact details, notes, or booking IDs.
+drop function if exists public.get_public_unavailable_dates(date, date);
 create or replace function public.get_public_unavailable_dates(
   p_start_date date,
   p_end_date date
 )
 returns table (
   check_in_date date,
-  check_out_date date
+  check_out_date date,
+  booking_status text
 )
 language sql
 stable
 security definer
 set search_path = ''
 as $$
-  select b.check_in_date, b.check_out_date
+  select b.check_in_date, b.check_out_date, b.status as booking_status
   from public.bookings as b
   join public.rooms as r on r.id = b.room_id
   where r.is_active = true
-    and b.status = 'confirmed'
+    and b.status in ('pending', 'confirmed')
     and b.check_in_date < p_end_date
     and b.check_out_date > p_start_date
-  order by b.check_in_date;
+  order by b.check_in_date, b.status;
 $$;
 
 create or replace function public.is_booking_date_available(
@@ -198,7 +201,7 @@ as $$
       select 1
       from public.bookings as b
       where b.room_id = p_room_id
-        and b.status = 'confirmed'
+        and b.status in ('pending', 'confirmed')
         and daterange(b.check_in_date, b.check_out_date, '[)')
           && daterange(p_check_in_date, p_check_out_date, '[)')
     );

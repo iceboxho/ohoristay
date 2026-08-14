@@ -63,6 +63,7 @@ test("booking integration targets the RLS-protected Supabase tables", async () =
   assert.doesNotMatch(bookingSource, /status:/);
   assert.match(availabilitySource, /rpc\("get_public_unavailable_dates"/);
   assert.match(availabilitySource, /rpc\("is_booking_date_available"/);
+  assert.match(availabilitySource, /bookingStatus/);
   assert.match(clientSource, /fetch\("\/api\/supabase-config"/);
   assert.doesNotMatch(clientSource, /process\.env\.NEXT_PUBLIC_SUPABASE/);
   assert.match(configRouteSource, /process\.env\.NEXT_PUBLIC_SUPABASE_URL/);
@@ -116,7 +117,9 @@ test("admin booking access uses Supabase Auth and admin-only RLS", async () => {
   assert.match(schema, /bookings_no_confirmed_overlap/);
   assert.match(schema, /create or replace function public\.get_public_unavailable_dates/);
   assert.match(schema, /create or replace function public\.is_booking_date_available/);
-  assert.match(schema, /never exposes guest data/);
+  assert.match(schema, /b\.status in \('pending', 'confirmed'\)/);
+  assert.match(schema, /booking_status text/);
+  assert.match(schema, /never exposes guest names, contact details, notes, or booking IDs/);
   assert.match(schema, /'ohori-stay-2ldk'/);
   assert.match(readme, /第一版測試用後台/);
   assert.match(readme, /service_role/);

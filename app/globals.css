@@ -105,6 +105,8 @@ h3 { line-height: 1.45; }
 .calendar-day-available:hover { background: #e7ddce; outline: 1px solid var(--wood); outline-offset: -1px; }
 .calendar-day-booked { background: #a47c63; color: #fff; }
 .calendar-day-booked small { color: rgba(255,255,255,.82); }
+.calendar-day-pending { background: #dbc9a5; color: #47392c; }
+.calendar-day-pending small { color: #6f563d; font-weight: 700; }
 .calendar-day-past,.calendar-day-outside { color: rgba(38,41,36,.24); }
 .calendar-day:disabled { cursor: default; }
 .calendar-footer { align-items: start; display: flex; gap: 1.5rem; justify-content: space-between; padding-top: 1.25rem; }
@@ -112,6 +114,10 @@ h3 { line-height: 1.45; }
 .calendar-legend { display: flex; flex-wrap: wrap; gap: 1rem; }
 .calendar-legend span { align-items: center; color: var(--muted); display: inline-flex; font-size: .66rem; gap: .4rem; }
 .calendar-legend i { border: 1px solid var(--line); display: block; height: .75rem; width: .75rem; }
+.legend-available { background: #f7f3ea; }
+.legend-pending { background: #dbc9a5; }
+.legend-booked { background: #a47c63; }
+.legend-past { background: rgba(38,41,36,.08); }
 .legend-available { background: #f7f3ea; }
 .legend-booked { background: #a47c63; }
 .legend-past { background: #e6e2da; opacity: .45; }

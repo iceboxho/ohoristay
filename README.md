@@ -61,7 +61,9 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 
 訂房表單會從 Supabase `rooms` 讀取唯一啟用的 `Ohori Stay 2LDK` 住宿資料，並將送出的申請新增到 `bookings`。前後端都限制入住人數為 1–6 人。表單不會進行付款；第一版後台可讓授權管理員查看訂房申請並修改狀態。
 
-公開房況月曆透過 `get_public_unavailable_dates` 讀取「已確認」訂單的入住與退房日期，僅回傳日期，不會公開姓名、電話、Email、備註或其他訂單資料。選擇日期送出前，表單會再透過 `is_booking_date_available` 確認沒有撞期。
+公開房況月曆透過 `get_public_unavailable_dates` 讀取「待確認」與「已確認」訂單的入住、退房日期及公開狀態，不會公開姓名、電話、Email、備註、訂單編號或其他訂單資料。月曆每 30 秒自動更新；待確認日期會獨立標示，送出前也會透過 `is_booking_date_available` 避免重複申請相同日期。
+
+若網站原本已執行過基礎 schema，請在 Supabase SQL Editor 再執行 `supabase/pending-availability.sql`，即可啟用待確認房況；新專案直接執行最新版 `supabase/schema.sql` 即可。
 
 表單欄位與送出介面分別放在：
 

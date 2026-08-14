@@ -3,11 +3,13 @@ import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 export type UnavailableDateRange = {
   checkInDate: string;
   checkOutDate: string;
+  bookingStatus: "pending" | "confirmed";
 };
 
 type UnavailableDateRow = {
   check_in_date: string;
   check_out_date: string;
+  booking_status?: string;
 };
 
 export async function fetchUnavailableDateRanges(startDate: string, endDate: string) {
@@ -22,6 +24,7 @@ export async function fetchUnavailableDateRanges(startDate: string, endDate: str
   return ((data ?? []) as UnavailableDateRow[]).map((range) => ({
     checkInDate: range.check_in_date,
     checkOutDate: range.check_out_date,
+    bookingStatus: range.booking_status === "pending" ? "pending" : "confirmed",
   }));
 }
 

@@ -55,3 +55,38 @@ test("booking integration targets the RLS-protected Supabase tables", async () =
   assert.match(envExample, /^NEXT_PUBLIC_SUPABASE_URL=$/m);
   assert.match(envExample, /^NEXT_PUBLIC_SUPABASE_ANON_KEY=$/m);
 });
+
+test("server-renders the protected admin bookings page shell", async () => {
+  const response = await render("/admin/bookings");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /訂房申請管理/);
+  assert.match(html, /正在確認管理員登入狀態/);
+  assert.match(html, /noindex/);
+});
+
+test("admin booking access uses Supabase Auth and admin-only RLS", async () => {
+  const [componentSource, dataSource, schema, readme] = await Promise.all([
+    readFile(new URL("../components/AdminBookings.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../lib/admin-bookings.ts", import.meta.url), "utf8"),
+    readFile(new URL("../supabase/schema.sql", import.meta.url), "utf8"),
+    readFile(new URL("../README.md", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(componentSource, /signInWithPassword/);
+  assert.doesNotMatch(componentSource, /signUp/);
+  assert.match(dataSource, /from\("bookings"\)/);
+  assert.match(dataSource, /rooms\(name\)/);
+  assert.match(dataSource, /\.update\(\{ status \}\)/);
+  for (const status of ["pending", "confirmed", "cancelled", "completed"]) {
+    assert.match(dataSource, new RegExp(`value: "${status}"`));
+  }
+  assert.match(schema, /create table if not exists public\.admin_users/);
+  assert.match(schema, /create or replace function public\.is_admin/);
+  assert.match(schema, /create policy "Admins can view bookings"/);
+  assert.match(schema, /create policy "Admins can update booking status"/);
+  assert.match(schema, /grant update \(status\) on table public\.bookings to authenticated/);
+  assert.match(readme, /第一版測試用後台/);
+  assert.match(readme, /service_role/);
+});

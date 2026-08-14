@@ -60,6 +60,12 @@ create table if not exists public.site_settings (
   updated_at timestamptz not null default now()
 );
 
+-- Only Supabase Auth users listed here can use the booking admin page.
+create table if not exists public.admin_users (
+  user_id uuid primary key references auth.users(id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
 -- Keep updated_at in sync whenever a row is updated.
 create or replace function public.set_updated_at()
 returns trigger
@@ -103,6 +109,27 @@ alter table public.rooms enable row level security;
 alter table public.bookings enable row level security;
 alter table public.news enable row level security;
 alter table public.site_settings enable row level security;
+alter table public.admin_users enable row level security;
+
+-- Security-definer helper keeps the admin allowlist private while allowing
+-- authenticated RLS policies to verify the current Supabase Auth user.
+create or replace function public.is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $$
+  select auth.uid() is not null
+    and exists (
+      select 1
+      from public.admin_users
+      where user_id = auth.uid()
+    );
+$$;
+
+revoke all on function public.is_admin() from public;
+grant execute on function public.is_admin() to authenticated;
 
 -- Recreate policies so the script can be safely run again.
 drop policy if exists "Public can view active rooms" on public.rooms;
@@ -126,12 +153,35 @@ for insert
 to anon, authenticated
 with check (status = 'pending');
 
+drop policy if exists "Admins can view all rooms" on public.rooms;
+create policy "Admins can view all rooms"
+on public.rooms
+for select
+to authenticated
+using (public.is_admin());
+
+drop policy if exists "Admins can view bookings" on public.bookings;
+create policy "Admins can view bookings"
+on public.bookings
+for select
+to authenticated
+using (public.is_admin());
+
+drop policy if exists "Admins can update booking status" on public.bookings;
+create policy "Admins can update booking status"
+on public.bookings
+for update
+to authenticated
+using (public.is_admin())
+with check (public.is_admin());
+
 -- Apply minimum API privileges. There is deliberately no public SELECT grant
 -- or SELECT policy for bookings, and no public policy for site_settings.
 revoke all on table public.rooms from anon, authenticated;
 revoke all on table public.bookings from anon, authenticated;
 revoke all on table public.news from anon, authenticated;
 revoke all on table public.site_settings from anon, authenticated;
+revoke all on table public.admin_users from anon, authenticated;
 
 grant select on table public.rooms to anon, authenticated;
 grant select on table public.news to anon, authenticated;
@@ -146,6 +196,8 @@ grant insert (
   line_id,
   note
 ) on table public.bookings to anon, authenticated;
+grant select on table public.bookings to authenticated;
+grant update (status) on table public.bookings to authenticated;
 
 -- Ohori Stay sample room data. Existing rows with the same slug are updated.
 insert into public.rooms (

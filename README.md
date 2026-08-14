@@ -20,6 +20,7 @@ Ohori Stay 是一個以福岡民宿／公寓式住宿為主題的訂房網站第
 - `/guide` 訂房須知
 - `/booking` 線上訂房
 - `/contact` 聯絡我們
+- `/admin/bookings` 訂房申請管理（需 Supabase Auth 管理員登入）
 
 ## 本機開發
 
@@ -54,7 +55,7 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 
 ## 訂房資料流程
 
-目前訂房表單會從 Supabase `rooms` 讀取啟用房型，並將送出的申請新增到 `bookings`。表單不會進行付款，也不包含登入或後台管理功能。
+目前訂房表單會從 Supabase `rooms` 讀取啟用房型，並將送出的申請新增到 `bookings`。表單不會進行付款。第一版後台可讓授權管理員查看訂房申請並修改狀態。
 
 表單欄位與送出介面分別放在：
 
@@ -62,6 +63,8 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 - `lib/booking.ts`：`BookingRequest` 型別與 Supabase 寫入
 - `lib/rooms.ts`：讀取啟用中的 Supabase 房型
 - `lib/supabase/client.ts`：瀏覽器端 Supabase client
+- `components/AdminBookings.tsx`：管理員登入、訂單列表與狀態操作
+- `lib/admin-bookings.ts`：後台訂單讀取與狀態更新
 
 訂房成功後可在 Supabase Dashboard 的 **Table Editor → bookings** 查看資料。前台使用 Anon Key，實際可執行的操作仍由 `supabase/schema.sql` 內的 RLS 與資料表權限限制。
 
@@ -73,6 +76,7 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 - `bookings` 訂房申請
 - `news` 最新消息
 - `site_settings` 網站設定
+- `admin_users` Supabase Auth 管理員允許清單
 - `updated_at` 自動更新 trigger
 - Row Level Security 與前台最小存取權限
 
@@ -81,11 +85,29 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 1. 登入 Supabase Dashboard 並開啟目標 Project。
 2. 前往 **SQL Editor**，建立一個新的 Query。
 3. 複製 `supabase/schema.sql` 的完整內容並貼入 SQL Editor。
-4. 按下 **Run**，完成後到 **Table Editor** 確認四張資料表與範例房型。
+4. 按下 **Run**，完成後到 **Table Editor** 確認資料表與範例房型。
 
-RLS 規則允許公開前台讀取啟用中的房型與已發布消息，也允許新增狀態為 `pending` 的訂房申請；公開前台不能讀取訂房清單，也不能存取網站設定。管理操作請使用 Supabase Dashboard 或安全的伺服器端程式。
+RLS 規則允許公開前台讀取啟用中的房型與已發布消息，也允許新增狀態為 `pending` 的訂房申請；公開前台不能讀取或修改訂房清單。只有通過 Supabase Auth 登入且列在 `admin_users` 的帳號可以讀取訂單及修改 `status`。
 
 執行 SQL 並設定兩個 Supabase 環境變數後，前端訂房表單才可載入房型及儲存訂房申請。
+
+## 第一版後台設定
+
+1. 先在 Supabase **SQL Editor** 重新執行最新版 `supabase/schema.sql`，建立 `admin_users` 與管理員 RLS policies。
+2. 前往 **Authentication → Users**，使用 **Add user** 建立管理員 Email／密碼帳號。網站不提供公開註冊功能。
+3. 複製該使用者的 UUID，在 SQL Editor 執行：
+
+```sql
+insert into public.admin_users (user_id)
+values ('請替換為管理員的 Auth User UUID')
+on conflict (user_id) do nothing;
+```
+
+4. 開啟 `/admin/bookings`，使用剛建立的 Email 與密碼登入。
+
+後台仍只使用 `NEXT_PUBLIC_SUPABASE_URL` 與 publishable／anon key，並透過 Supabase Auth session 與 RLS 控制權限；請勿加入 `service_role` key。
+
+> 這是第一版測試用後台。正式上線前仍必須完善管理員登入與權限保護，例如 MFA、密碼與帳號生命週期政策、登入稽核、異常操作監控及權限定期檢查。
 
 ## 資料夾結構
 
@@ -101,4 +123,4 @@ build/               Sites/Vite 建置整合
 
 ## 第一版範圍
 
-本版本已提供 Supabase SQL schema 與前台訂房寫入，但尚未包含線上付款、真實後台、登入、即時房況或正式價格。上線前請替換正式地址、聯絡信箱、房價、房型照片與完整取消政策。
+本版本已提供 Supabase SQL schema、前台訂房寫入，以及第一版訂單查看與狀態管理；尚未包含線上付款、房型管理、最新消息管理、即時房況或完整正式後台。上線前請完成上述管理員安全強化，並替換正式地址、聯絡信箱、房價、房型照片與完整取消政策。

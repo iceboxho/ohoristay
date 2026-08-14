@@ -1,6 +1,7 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/lib/supabase/database.types";
 
-let browserClient: ReturnType<typeof createClient> | null = null;
+let browserClient: SupabaseClient<Database> | null = null;
 
 export class SupabaseConfigurationError extends Error {
   constructor() {
@@ -18,11 +19,11 @@ export function getSupabaseBrowserClient() {
   }
 
   if (!browserClient) {
-    browserClient = createClient(supabaseUrl, supabaseAnonKey, {
+    browserClient = createClient<Database>(supabaseUrl, supabaseAnonKey, {
       auth: {
-        autoRefreshToken: false,
+        autoRefreshToken: true,
         detectSessionInUrl: false,
-        persistSession: false,
+        persistSession: true,
       },
     });
   }

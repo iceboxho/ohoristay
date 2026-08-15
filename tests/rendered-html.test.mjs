@@ -133,3 +133,23 @@ test("admin booking access uses Supabase Auth and admin-only RLS", async () => {
   assert.match(readme, /第一版測試用後台/);
   assert.match(readme, /service_role/);
 });
+
+test("Supabase health check is read-only and scheduled in GitHub Actions", async () => {
+  const [healthRoute, workflow, readme] = await Promise.all([
+    readFile(new URL("../app/api/health/supabase/route.ts", import.meta.url), "utf8"),
+    readFile(new URL("../.github/workflows/supabase-keepalive.yml", import.meta.url), "utf8"),
+    readFile(new URL("../README.md", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(healthRoute, /from\("rooms"\)/);
+  assert.match(healthRoute, /eq\("is_active", true\)/);
+  assert.match(healthRoute, /select\("id"\)/);
+  assert.doesNotMatch(healthRoute, /from\("bookings"\)|service_role|insert\(|update\(|delete\(/);
+  assert.match(healthRoute, /Cache-Control.*no-store/s);
+  assert.match(workflow, /cron: ["']37 0 \* \* \*["']/);
+  assert.match(workflow, /workflow_dispatch:/);
+  assert.match(workflow, /ohori-stay\.iceboxho\.chatgpt\.site\/api\/health\/supabase/);
+  assert.doesNotMatch(workflow, /SUPABASE_(URL|KEY)|secrets\./);
+  assert.match(readme, /每天台灣時間 08:37/);
+  assert.match(readme, /不需要保持個人電腦開機/);
+});

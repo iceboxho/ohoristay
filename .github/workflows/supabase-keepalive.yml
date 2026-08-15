@@ -1,0 +1,31 @@
+name: Supabase daily health check
+
+on:
+  schedule:
+    # 00:37 UTC is 08:37 in Taiwan (UTC+8).
+    - cron: "37 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: supabase-daily-health-check
+  cancel-in-progress: true
+
+jobs:
+  check-supabase:
+    name: Check Supabase through Ohori Stay
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Request the read-only health endpoint
+        run: >-
+          curl
+          --fail
+          --show-error
+          --silent
+          --retry 3
+          --retry-delay 10
+          --max-time 30
+          https://ohori-stay.iceboxho.chatgpt.site/api/health/supabase

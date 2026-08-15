@@ -57,6 +57,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
 
 Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 **Project Settings → API** 取得。`NEXT_PUBLIC_SUPABASE_ANON_KEY` 是供瀏覽器搭配 RLS 使用的公開金鑰；請勿將 `service_role` key 放入前端環境變數、程式碼或 GitHub。
 
+## Supabase 雲端健康檢查
+
+`.github/workflows/supabase-keepalive.yml` 會由 GitHub Actions 每天台灣時間 08:37 執行，不需要保持個人電腦開機。排程會呼叫公開網站的 `/api/health/supabase`，由網站使用既有的 Supabase Project URL 與 publishable／anon key，對 RLS 允許公開讀取的 `rooms` 執行一次最小化唯讀查詢。
+
+健康檢查只回傳成功狀態與檢查時間，不會讀取或公開訂房、旅客、管理員資料，也不需要在 GitHub 設定 Supabase 金鑰。可在 GitHub repository 的 **Actions → Supabase daily health check → Run workflow** 手動測試；若請求失敗，該次 workflow 會標示為失敗。
+
+> 這是降低免費方案因資料庫活動不足而暫停風險的輔助監測，不是 Supabase 的不中斷服務保證。若 repository 為公開且長期完全沒有活動，GitHub 也可能停用 scheduled workflow，應定期確認 Actions 頁面的最近執行紀錄。
+
 ## 訂房資料流程
 
 訂房表單會從 Supabase `rooms` 讀取唯一啟用的 `Ohori Stay 2LDK` 住宿資料，並將送出的申請新增到 `bookings`。前後端都限制入住人數為 1–6 人。表單不會進行付款；第一版後台可讓授權管理員查看訂房申請並修改狀態。

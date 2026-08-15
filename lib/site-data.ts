@@ -3,6 +3,7 @@ export const navigation = [
   { href: "/rooms", label: "空間介紹" },
   { href: "/facilities", label: "環境設施" },
   { href: "/access", label: "交通資訊" },
+  { href: "/food", label: "附近美食" },
   { href: "/guide", label: "入住須知" },
   { href: "/contact", label: "聯絡我們" },
 ];

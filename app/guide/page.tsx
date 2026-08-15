@@ -14,7 +14,7 @@ const guideItems = [
   ["取消與變更", "取消、日期變更與退款條件以訂房確認時提供的內容為準；送出申請前如有疑問，歡迎先與我們聯絡。"],
 ];
 export default function GuidePage() {
-  return <><PageHero eyebrow="STAY GUIDE" title="入住前，先知道這些事。" description="清楚理解申請流程、入住人數與住宿規範，讓雙方都能放心確認每一趟旅程。" index="05" />
+  return <><PageHero eyebrow="STAY GUIDE" title="入住前，先知道這些事。" description="清楚理解申請流程、入住人數與住宿規範，讓雙方都能放心確認每一趟旅程。" index="06" />
     <section className="section-space"><div className="narrow-shell"><div className="guide-list">{guideItems.map(([title,content], index) => <details key={title} open={index===0}><summary><span>{String(index+1).padStart(2,"0")}</span>{title}<i>＋</i></summary><p>{content}</p></details>)}</div><div className="guide-cta"><p>還有想先確認的事情嗎？</p><a className="text-link" href="/contact">聯絡我們 →</a><a className="button" href="/booking">前往訂房申請</a></div></div></section>
     <section className="guest-guide-section section-space"><div className="section-shell"><div className="section-heading-row"><div><p className="eyebrow">GUEST GUIDE</p><h2>入住與退房圖解</h2></div><p className="muted-copy">請在入住前與退房當天詳閱。點選圖片可開啟原尺寸查看。</p></div><div className="guest-guide-grid">
       <figure><a href="/801-check-in-guide.webp" target="_blank" rel="noreferrer"><img src="/801-check-in-guide.webp" alt="801 入住指南：垃圾分類、生活公約與設備使用說明" /></a><figcaption><span>01</span><div><h3>入住指南</h3><p>垃圾分類、生活公約與房內設備使用說明</p></div><a className="text-link" href="/801-check-in-guide.webp" target="_blank" rel="noreferrer">放大查看 →</a></figcaption></figure>

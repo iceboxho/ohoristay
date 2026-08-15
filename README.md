@@ -17,6 +17,7 @@
 - `/rooms` 整套 2LDK 空間介紹
 - `/facilities` 環境設施
 - `/access` 交通資訊
+- `/food` 附近美食推薦
 - `/guide` 訂房須知
 - `/booking` 線上訂房
 - `/contact` 聯絡我們

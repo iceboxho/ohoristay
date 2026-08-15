@@ -26,6 +26,7 @@ test("server-renders the 大濠・捌零壹 homepage", async () => {
   assert.match(html, /一次一組/);
   assert.match(html, /最多 6 人/);
   assert.match(html, /href=["']\/admin\/bookings["'][^>]*>訂房管理</);
+  assert.match(html, /href=["']\/food["'][^>]*>附近美食</);
   assert.match(html, /STAY CALENDAR/);
   assert.match(html, /action=["']\/booking#availability["']/);
   assert.doesNotMatch(html, /aria-label=["']入住日期["'][^>]*required/);
@@ -99,6 +100,19 @@ test("server-renders the check-in and check-out guest guides", async () => {
   assert.match(html, /801-check-in-guide\.webp/);
   assert.match(html, /801-check-out-guide\.webp/);
   assert.match(html, /入住與退房圖解/);
+});
+
+test("server-renders the nearby food guide with official and map links", async () => {
+  const response = await render("/food");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  for (const place of ["Starbucks 福岡大濠公園店", "シモン本店", "&amp;LOCALS 大濠公園", "Royal Garden Cafe 大濠公園", "大濠うなぎ", "レストラン花の木"]) {
+    assert.match(html, new RegExp(place));
+  }
+  assert.match(html, /google\.com\/maps\/search/);
+  assert.match(html, /官方資訊/);
+  assert.match(html, /資料確認日期：2026 年 8 月 15 日/);
 });
 
 test("admin booking access uses Supabase Auth and admin-only RLS", async () => {

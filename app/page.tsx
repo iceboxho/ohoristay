@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- Static hospitality photography is served from the project public directory. */
-import { facilities, stay } from "@/lib/site-data";
+import { brand, facilities, stay } from "@/lib/site-data";
 import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
 
 function QuickBookingBar() {
@@ -17,13 +17,13 @@ export default function Home() {
   return (
     <>
       <section className="immersive-hero">
-        <img className="immersive-hero-image" src="/ohori-living-dining.png" alt="Ohori Stay 採光明亮的客餐廳與廚房" />
+        <img className="immersive-hero-image" src="/ohori-living-dining.png" alt={`${brand.name}採光明亮的客餐廳與廚房`} />
         <div className="immersive-hero-shade" />
         <div className="immersive-hero-copy">
           <p className="eyebrow">FUKUOKA · OHORI</p>
           <h1>住進大濠，<br />擁有一段福岡日常</h1>
           <p>{stay.layout}・一次一組・最多 {stay.capacity} 人</p>
-          <a className="text-link" href="/rooms">走進 Ohori Stay →</a>
+          <a className="text-link" href="/rooms">走進 {brand.name} →</a>
         </div>
         <QuickBookingBar />
       </section>
@@ -49,9 +49,9 @@ export default function Home() {
         <div className="section-shell">
           <div className="section-heading-row"><div><p className="eyebrow">THE STAY</p><h2>一套 2LDK，盛放旅程裡的相聚。</h2></div><a className="text-link" href="/rooms">完整空間介紹 →</a></div>
           <div className="stay-gallery">
-            <figure className="stay-gallery-main"><img src="/ohori-living-dining.png" alt="Ohori Stay 客餐廳與完整廚房" /><figcaption>客餐廳與廚房</figcaption></figure>
-            <figure><img src="/ohori-bedroom-queen.png" alt="Ohori Stay 主臥室" /><figcaption>主臥室</figcaption></figure>
-            <figure><img src="/ohori-bedroom-twin.png" alt="Ohori Stay 次臥室" /><figcaption>次臥室</figcaption></figure>
+            <figure className="stay-gallery-main"><img src="/ohori-living-dining.png" alt={`${brand.name}客餐廳與完整廚房`} /><figcaption>客餐廳與廚房</figcaption></figure>
+            <figure><img src="/ohori-bedroom-queen.png" alt={`${brand.name}主臥室`} /><figcaption>主臥室</figcaption></figure>
+            <figure><img src="/ohori-bedroom-twin.png" alt={`${brand.name}次臥室`} /><figcaption>次臥室</figcaption></figure>
           </div>
           <div className="stay-facts">
             <div><small>TYPE</small><strong>{stay.layout}</strong></div><div><small>CAPACITY</small><strong>{stay.guests}</strong></div><div><small>PRIVACY</small><strong>一次一組</strong></div><div><small>BEDROOMS</small><strong>{stay.bedrooms}</strong></div>

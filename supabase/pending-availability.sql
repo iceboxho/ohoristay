@@ -1,4 +1,4 @@
--- Ohori Stay: show pending booking dates on the public availability calendar.
+-- 大濠・捌零壹: show pending booking dates on the public availability calendar.
 -- Safe to run in Supabase SQL Editor after the base supabase/schema.sql.
 
 drop function if exists public.get_public_unavailable_dates(date, date);

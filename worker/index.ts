@@ -1,4 +1,4 @@
-/** Cloudflare Worker entry point for Ohori Stay. */
+/** Cloudflare Worker entry point for 大濠・捌零壹. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
 

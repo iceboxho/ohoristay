@@ -14,13 +14,13 @@ async function render(pathname = "/") {
   );
 }
 
-test("server-renders the Ohori Stay homepage", async () => {
+test("server-renders the 大濠・捌零壹 homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /OHORI/);
+  assert.match(html, /大濠・捌零壹/);
   assert.match(html, /住進大濠/);
   assert.match(html, /線上訂房/);
   assert.match(html, /一次一組/);

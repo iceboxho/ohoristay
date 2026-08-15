@@ -47,8 +47,8 @@ h3 { line-height: 1.45; }
 .site-header { backdrop-filter: blur(18px); background: rgba(249,246,239,.93); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; }
 .site-header-inner { align-items: center; display: flex; justify-content: space-between; margin-inline: auto; max-width: 1440px; min-height: 74px; padding-inline: clamp(1.25rem,4vw,3rem); }
 .brand-mark { display: inline-flex; flex-direction: column; font-family: Georgia,var(--serif); letter-spacing: .22em; line-height: 1; }
-.brand-mark span { font-size: 1.22rem; }
-.brand-mark small { font-size: .55rem; letter-spacing: .65em; margin-top: .28rem; }
+.brand-mark span { font-size: 1.22rem; letter-spacing: .16em; }
+.brand-mark small { font-size: .5rem; letter-spacing: .42em; margin-top: .35rem; }
 .desktop-nav { align-items: center; display: flex; gap: clamp(.8rem,1.6vw,1.75rem); }
 .desktop-nav > a:not(.button) { font-size: .72rem; font-weight: 650; letter-spacing: .035em; position: relative; }
 .desktop-nav > a:not(.button)::after { background: var(--wood); bottom: -.35rem; content: ""; height: 1px; left: 0; position: absolute; transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; width: 100%; }

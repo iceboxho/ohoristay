@@ -158,7 +158,7 @@ export function AdminBookings() {
     <section className="admin-shell">
       <div className="admin-heading">
         <div>
-          <p className="eyebrow">OHORI STAY ADMIN</p>
+          <p className="eyebrow">大濠・捌零壹 ADMIN</p>
           <h1>訂房申請管理</h1>
           <p>查看最新訂房資料，並更新每筆申請的確認狀態。</p>
         </div>

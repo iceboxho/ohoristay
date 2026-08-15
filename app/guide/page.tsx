@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/PageHero";
+import { brand } from "@/lib/site-data";
 
 /* eslint-disable @next/next/no-img-element -- Guest guide images are optimized static assets. */
 
 export const metadata: Metadata = { title: "入住須知" };
 const guideItems = [
   ["入住與退房", "入住與退房時間會在訂房確認時一併提供。若有晚班機或特殊抵達安排，請先在備註欄告知。"],
-  ["一次一組・最多 6 人", "Ohori Stay 為整套 2LDK，每筆住宿只接待同一組旅客；實際入住人數不得超過 6 人。"],
+  ["一次一組・最多 6 人", `${brand.name}為整套 2LDK，每筆住宿只接待同一組旅客；實際入住人數不得超過 6 人。`],
   ["訂房成立方式", "送出表單是住宿申請，尚未代表訂房成立。我們確認日期與費用並完成後續確認後，訂房才正式成立。"],
   ["兒童與加床需求", "如有兒童同行、嬰幼兒用品或特殊床位安排，請在申請時備註，我們會依空間與安全條件回覆。"],
   ["室內禁菸與安寧", "室內全面禁菸。公寓位於生活社區，夜間請降低音量並遵守住宿確認信中的安寧規範。"],

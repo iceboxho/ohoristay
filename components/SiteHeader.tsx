@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-html-link-for-pages -- Native navigation avoids a vinext production Link runtime failure. */
-import { navigation } from "@/lib/site-data";
+import { brand, navigation } from "@/lib/site-data";
 
 export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <a className="brand-mark" href="/" aria-label="Ohori Stay 首頁">
-          <span>OHORI</span><small>STAY</small>
+        <a className="brand-mark" href="/" aria-label={`${brand.name} 首頁`}>
+          <span>{brand.name}</span><small>{brand.englishName}</small>
         </a>
         <nav className="desktop-nav" aria-label="主要選單">
           {navigation.map((item) => <a href={item.href} key={item.href}>{item.label}</a>)}

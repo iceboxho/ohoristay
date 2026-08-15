@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   check-supabase:
-    name: Check Supabase through Ohori Stay
+    name: Check Supabase through 大濠・捌零壹
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

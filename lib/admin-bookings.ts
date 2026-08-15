@@ -1,4 +1,5 @@
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { brand } from "@/lib/site-data";
 
 export const bookingStatusOptions = [
   { value: "pending", label: "待確認" },
@@ -40,8 +41,9 @@ type BookingRow = {
 };
 
 function roomName(rooms: BookingRow["rooms"]) {
-  if (Array.isArray(rooms)) return rooms[0]?.name ?? "房型已移除";
-  return rooms?.name ?? "房型已移除";
+  const name = Array.isArray(rooms) ? rooms[0]?.name : rooms?.name;
+  if (!name) return "房型已移除";
+  return name === "Ohori Stay 2LDK" ? brand.roomName : name;
 }
 
 export async function fetchAdminBookings(): Promise<AdminBooking[]> {

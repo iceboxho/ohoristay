@@ -1,6 +1,6 @@
-# Ohori Stay
+# 大濠・捌零壹
 
-Ohori Stay 是福岡大濠一帶的整套 2LDK 訂房網站。住宿一次只接待一組旅客、最多 6 人；介面採日系簡約風格，以米白、淺木與奶茶色呈現溫暖乾淨的品牌形象。
+大濠・捌零壹是福岡大濠一帶的整套 2LDK 訂房網站。住宿一次只接待一組旅客、最多 6 人；介面採日系簡約風格，以米白、淺木與奶茶色呈現溫暖乾淨的品牌形象。
 
 ## 技術架構
 
@@ -67,7 +67,7 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 
 ## 訂房資料流程
 
-訂房表單會從 Supabase `rooms` 讀取唯一啟用的 `Ohori Stay 2LDK` 住宿資料，並將送出的申請新增到 `bookings`。前後端都限制入住人數為 1–6 人。表單不會進行付款；第一版後台可讓授權管理員查看訂房申請並修改狀態。
+訂房表單會從 Supabase `rooms` 讀取唯一啟用的 `大濠・捌零壹 2LDK` 住宿資料，並將送出的申請新增到 `bookings`。前後端都限制入住人數為 1–6 人。表單不會進行付款；第一版後台可讓授權管理員查看訂房申請並修改狀態。
 
 公開房況月曆透過 `get_public_unavailable_dates` 讀取「待確認」與「已確認」訂單的入住、退房日期及公開狀態，不會公開姓名、電話、Email、備註、訂單編號或其他訂單資料。月曆每 30 秒自動更新；待確認日期會獨立標示，送出前也會透過 `is_booking_date_available` 避免重複申請相同日期。
 
@@ -90,7 +90,7 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 
 資料庫結構位於 `supabase/schema.sql`，包含：
 
-- `rooms` 住宿資料（目前只啟用一筆 `Ohori Stay 2LDK`）
+- `rooms` 住宿資料（目前只啟用一筆 `大濠・捌零壹 2LDK`）
 - `bookings` 訂房申請
 - `news` 最新消息
 - `site_settings` 網站設定
@@ -105,7 +105,7 @@ Supabase Project URL 與 Anon Key 可從 Supabase Dashboard 的 **Connect** 或 
 1. 登入 Supabase Dashboard 並開啟目標 Project。
 2. 前往 **SQL Editor**，建立一個新的 Query。
 3. 複製 `supabase/schema.sql` 的完整內容並貼入 SQL Editor。
-4. 按下 **Run**，完成後到 **Table Editor → rooms** 確認只有 `Ohori Stay 2LDK` 為啟用狀態。
+4. 按下 **Run**，完成後到 **Table Editor → rooms** 確認只有 `大濠・捌零壹 2LDK` 為啟用狀態。
 
 若專案先前執行過舊版 schema，重新執行本檔會保留既有訂房紀錄、停用三筆舊示範房型，並加入每筆訂房最多 6 人、公開房況月曆與已確認訂單不可撞期的限制。
 

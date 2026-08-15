@@ -1,4 +1,4 @@
--- Ohori Stay Supabase schema
+-- 大濠・捌零壹 Supabase schema
 -- Run this file in Supabase Dashboard > SQL Editor.
 
 create extension if not exists pgcrypto;
@@ -37,7 +37,7 @@ create table if not exists public.bookings (
   constraint bookings_valid_date_range check (check_out_date > check_in_date)
 );
 
--- Ohori Stay is one whole 2LDK that accepts 1 to 6 guests per booking.
+-- 大濠・捌零壹 is one whole 2LDK that accepts 1 to 6 guests per booking.
 -- The named constraint is recreated so existing projects can safely adopt it.
 alter table public.bookings drop constraint if exists bookings_guests_limit;
 alter table public.bookings
@@ -280,7 +280,7 @@ grant insert (
 grant select on table public.bookings to authenticated;
 grant update (status) on table public.bookings to authenticated;
 
--- Ohori Stay is sold as one whole 2LDK, never as separate room inventory.
+-- 大濠・捌零壹 is sold as one whole 2LDK, never as separate room inventory.
 -- Existing demo room rows are kept for booking history but deactivated.
 update public.rooms
 set is_active = false
@@ -299,7 +299,7 @@ insert into public.rooms (
 )
 values
   (
-    'Ohori Stay 2LDK',
+    '大濠・捌零壹 2LDK',
     'ohori-stay-2ldk',
     '福岡大濠一帶的整套 2LDK，一次只接待一組旅客，最多入住六人。',
     6,

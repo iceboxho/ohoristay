@@ -5,6 +5,7 @@ import { submitBookingRequest } from "@/lib/booking";
 import { checkBookingAvailability } from "@/lib/availability";
 import { fetchActiveRooms, type RoomOption } from "@/lib/rooms";
 import { SupabaseConfigurationError } from "@/lib/supabase/client";
+import { brand } from "@/lib/site-data";
 
 type FormStatus = "idle" | "submitting" | "success";
 type RoomsStatus = "loading" | "ready" | "error";
@@ -117,7 +118,7 @@ export function BookingForm({ initialRoom = "", initialCheckIn = "", initialChec
   }
 
   return <form className="booking-form" onChange={() => { if (errorMessage) setErrorMessage(""); }} onSubmit={handleSubmit} noValidate>
-    <div className="stay-selection" aria-live="polite"><span>本次申請住宿</span><strong>{roomsStatus === "loading" ? "正在載入住宿資料…" : roomOption?.name ?? "Ohori Stay 2LDK"}</strong><small>整套 2LDK・一次一組・最多 6 人</small></div>
+    <div className="stay-selection" aria-live="polite"><span>本次申請住宿</span><strong>{roomsStatus === "loading" ? "正在載入住宿資料…" : roomOption?.name ?? brand.roomName}</strong><small>整套 2LDK・一次一組・最多 6 人</small></div>
     <input name="roomType" type="hidden" value={roomOption?.id ?? ""} />
 
     <div className="form-section-heading"><span>01</span><div><h2>住宿需求</h2><p>請告訴我們預計入住的日期與人數。</p></div></div>

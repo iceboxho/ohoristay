@@ -1,4 +1,5 @@
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { brand } from "@/lib/site-data";
 
 export type RoomOption = {
   id: string;
@@ -19,5 +20,8 @@ export async function fetchActiveRooms(): Promise<RoomOption[]> {
     throw error;
   }
 
-  return (data ?? []) as RoomOption[];
+  return ((data ?? []) as RoomOption[]).map((room) => ({
+    ...room,
+    name: room.slug === "ohori-stay-2ldk" ? brand.roomName : room.name,
+  }));
 }

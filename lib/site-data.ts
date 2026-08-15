@@ -7,8 +7,14 @@ export const navigation = [
   { href: "/contact", label: "聯絡我們" },
 ];
 
+export const brand = {
+  name: "大濠・捌零壹",
+  englishName: "OHORI 801",
+  roomName: "大濠・捌零壹 2LDK",
+} as const;
+
 export const stay = {
-  name: "Ohori Stay 2LDK",
+  name: brand.roomName,
   slug: "ohori-stay-2ldk",
   tagline: "像住進自己的福岡日常",
   guests: "1–6 人",
